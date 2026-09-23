@@ -86,40 +86,39 @@ export DDG_RATE_LIMIT_STRATEGY="$RATE_LIMIT_STRATEGY"
 CMD_ARGS=""
 
 # Add transport (CLI option)
-CMD_ARGS="$CMD_ARGS --transport \"$TRANSPORT\""
+CMD_ARGS="$CMD_ARGS --transport $TRANSPORT"
 
 # Add host (CLI option)
-CMD_ARGS="$CMD_ARGS --host \"$HOST\""
+CMD_ARGS="$CMD_ARGS --host $HOST"
 
 # Add port (CLI option)
-CMD_ARGS="$CMD_ARGS --port \"$PORT\""
+CMD_ARGS="$CMD_ARGS --port $PORT"
 
 # Add search timeout (CLI option)
-CMD_ARGS="$CMD_ARGS --search-timeout \"$SEARCH_TIMEOUT\""
+CMD_ARGS="$CMD_ARGS --search-timeout $SEARCH_TIMEOUT"
 
 # Add max results (CLI option)
-CMD_ARGS="$CMD_ARGS --max-results \"$MAX_RESULTS\""
+CMD_ARGS="$CMD_ARGS --max-results $MAX_RESULTS"
 
 # Add enable ssl (CLI option)
-CMD_ARGS="$CMD_ARGS --enable-ssl \"$ENABLE_SSL\""
+CMD_ARGS="$CMD_ARGS --enable-ssl $ENABLE_SSL"
 
 # Add proxy (CLI option)
 if [ -n "$PROXY" ]; then
-    CMD_ARGS="$CMD_ARGS --proxy \"$PROXY\""
+    CMD_ARGS="$CMD_ARGS --proxy $PROXY"
 fi
 
 # Add enable cache (CLI option)
-CMD_ARGS="$CMD_ARGS --enable-cache \"$ENABLE_CACHE\""
+CMD_ARGS="$CMD_ARGS --enable-cache $ENABLE_CACHE"
 
 # Add enable logging (CLI option)
-CMD_ARGS="$CMD_ARGS --enable-logging \"$ENABLE_LOGGING\""
+CMD_ARGS="$CMD_ARGS --enable-logging $ENABLE_LOGGING"
 
 # Add log level (CLI option)
-CMD_ARGS="$CMD_ARGS --log-level \"$LOG_LEVEL\""
+CMD_ARGS="$CMD_ARGS --log-level $LOG_LEVEL"
 
 # Add user agent (CLI option)
-CMD_ARGS="$CMD_ARGS --user-agent \"$USER_AGENT\""
+CMD_ARGS="$CMD_ARGS --user-agent $USER_AGENT"
 
 # Execute the actual server with command line arguments
 exec "$SNAP/bin/duckduckgo-mcp-server" $CMD_ARGS
-
