@@ -9,15 +9,7 @@ description: |
   - transport: Transport method (streamable-http or websocket) [default: streamable-http]
   - host: Host address to bind to [default: 127.0.0.1]
   - port: Port number to listen on [default: 8000]
-  - search-timeout: Timeout for search requests in seconds [default: 10]
-  - max-results: Maximum number of search results to return [default: 10]
-  - enable-ssl: Whether to enable SSL/TLS [default: true]
-  - user-agent: User agent string to use for requests [default: DuckDuckGo MCP Server/0.7.0]
-  - proxy: Proxy server to use for requests [default: (empty)]
-  - enable-cache: Whether to enable result caching [default: true]
-  - cache-ttl: Time-to-live for cached results in seconds [default: 300]
   - cache-max-entries: Maximum cache entries [default: 64]
-  - parse-mode: Parse mode for fetch_content [default: text]
   - ref-url-threshold: URL threshold for ref tokens [default: 120]
   - safe-search: SafeSearch filtering level [default: (empty)]
   - region: Default region/language code [default: (empty)]
@@ -26,9 +18,6 @@ description: |
   - fetch-rpm: Fetch requests per minute [default: 20]
   - fetch-host-rpm: Per-host fetch cap [default: 0]
   - search-rpm: Search requests per minute [default: 30]
-  - enable-logging: Whether to enable logging [default: false]
-  - log-level: Logging level (DEBUG, INFO, WARNING, ERROR) [default: INFO]
-
 
   This snap simply packages the upstream tree from:
 
