@@ -37,6 +37,11 @@ description: |
   Do not file issues about the snap upstream, instead use the issue tracker for the snap
 
 title: DuckDuckGo MCP Server
+contact: https://github.com/ogra1/duckduckgo-mcp-server-snap/issues
+issues: https://github.com/ogra1/duckduckgo-mcp-server-snap/issues
+source-code: https://github.com/ogra1/duckduckgo-mcp-server-snap
+website: https://github.com/ogra1/duckduckgo-mcp-server-snap
+license: MIT
 
 grade: stable
 confinement: strict
