@@ -1,0 +1,78 @@
+name: duckduckgo-mcp-server
+summary: MCP Server for searching via DuckDuckGo
+adopt-info: duckduckgo-mcp-server
+description: |
+  A server that provides an MCP (Model Communication Protocol) interface for DuckDuckGo searches.
+  This allows applications to search the web using DuckDuckGo's search capabilities through the MCP protocol.
+  
+  Configuration Options (set with 'snap set'):
+  - transport: Transport method (streamable-http or websocket) [default: streamable-http]
+  - host: Host address to bind to [default: 127.0.0.1]
+  - port: Port number to listen on [default: 8000]
+  - search-timeout: Timeout for search requests in seconds [default: 10]
+  - max-results: Maximum number of search results to return [default: 10]
+  - enable-ssl: Whether to enable SSL/TLS [default: true]
+  - user-agent: User agent string to use for requests [default: DuckDuckGo MCP Server/0.7.0]
+  - proxy: Proxy server to use for requests [default: (empty)]
+  - enable-cache: Whether to enable result caching [default: true]
+  - cache-ttl: Time-to-live for cached results in seconds [default: 300]
+  - cache-max-entries: Maximum cache entries [default: 64]
+  - parse-mode: Parse mode for fetch_content [default: text]
+  - ref-url-threshold: URL threshold for ref tokens [default: 120]
+  - safe-search: SafeSearch filtering level [default: (empty)]
+  - region: Default region/language code [default: (empty)]
+  - ca-certs: Path to CA bundle for TLS verification [default: (empty)]
+  - rate-limit-strategy: Rate limiting strategy [default: sliding]
+  - fetch-rpm: Fetch requests per minute [default: 20]
+  - fetch-host-rpm: Per-host fetch cap [default: 0]
+  - search-rpm: Search requests per minute [default: 30]
+  - enable-logging: Whether to enable logging [default: false]
+  - log-level: Logging level (DEBUG, INFO, WARNING, ERROR) [default: INFO]
+
+
+  This snap simply packages the upstream tree from:
+
+    https://github.com/nickclyde/duckduckgo-mcp-server
+
+  Do not file issues about the snap upstream, instead use the issue tracker for the snap
+
+title: DuckDuckGo MCP Server
+
+grade: stable
+confinement: strict
+base: core26
+
+apps:
+  duckduckgo-mcp-server:
+    command: bin/wrapper-script.sh
+    daemon: simple
+    environment:
+      PYTHONPATH: $SNAP/lib/python3.14/site-packages:$SNAP/lib/python3.14/dist-packages:$PYTHONPATH
+    plugs:
+      - network
+      - network-bind
+
+parts:
+  duckduckgo-mcp-server:
+    plugin: python
+    source: https://github.com/nickclyde/duckduckgo-mcp-server
+    source-type: git
+    python-packages:
+      - beautifulsoup4
+      - httpx
+      - httpcore
+      - mcp
+      - curl_cffi
+    stage-packages:
+      - python3-venv
+    build-packages:
+      - python3-venv
+    override-pull: |
+      craftctl default
+      craftctl set version=$(git describe --tags --abbrev=0 | cut -c 2-)
+
+  wrapper-script:
+    plugin: dump
+    source: snap/local/
+    organize:
+      wrapper-script.sh: bin/wrapper-script.sh
