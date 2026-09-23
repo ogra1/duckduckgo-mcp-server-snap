@@ -26,31 +26,47 @@ SEARCH_RPM="30"
 ENABLE_LOGGING="false"
 LOG_LEVEL="INFO"
 
+# Helper function to get snapctl value or use default
+get_snapctl_value() {
+    local key="$1"
+    local default="$2"
+    local value
+    
+    value=$(snapctl get "$key" 2>/dev/null)
+    
+    # If value is empty or not set, use default
+    if [ -z "$value" ]; then
+        echo "$default"
+    else
+        echo "$value"
+    fi
+}
+
 # Check for configuration using snapctl
 if command -v snapctl &> /dev/null; then
     # Get configuration values using snapctl
-    TRANSPORT=$(snapctl get transport 2>/dev/null || echo "streamable-http")
-    HOST=$(snapctl get host 2>/dev/null || echo "127.0.0.1")
-    PORT=$(snapctl get port 2>/dev/null || echo "8000")
-    SEARCH_TIMEOUT=$(snapctl get search-timeout 2>/dev/null || echo "10")
-    MAX_RESULTS=$(snapctl get max-results 2>/dev/null || echo "10")
-    ENABLE_SSL=$(snapctl get enable-ssl 2>/dev/null || echo "true")
-    USER_AGENT=$(snapctl get user-agent 2>/dev/null || echo "DuckDuckGo MCP Server/0.7.0")
-    PROXY=$(snapctl get proxy 2>/dev/null || echo "")
-    ENABLE_CACHE=$(snapctl get enable-cache 2>/dev/null || echo "true")
-    CACHE_TTL=$(snapctl get cache-ttl 2>/dev/null || echo "300")
-    CACHE_MAX_ENTRIES=$(snapctl get cache-max-entries 2>/dev/null || echo "64")
-    PARSE_MODE=$(snapctl get parse-mode 2>/dev/null || echo "text")
-    REF_URL_THRESHOLD=$(snapctl get ref-url-threshold 2>/dev/null || echo "120")
-    SAFE_SEARCH=$(snapctl get safe-search 2>/dev/null || echo "")
-    REGION=$(snapctl get region 2>/dev/null || echo "")
-    CA_CERTS=$(snapctl get ca-certs 2>/dev/null || echo "")
-    RATE_LIMIT_STRATEGY=$(snapctl get rate-limit-strategy 2>/dev/null || echo "sliding")
-    FETCH_RPM=$(snapctl get fetch-rpm 2>/dev/null || echo "20")
-    FETCH_HOST_RPM=$(snapctl get fetch-host-rpm 2>/dev/null || echo "0")
-    SEARCH_RPM=$(snapctl get search-rpm 2>/dev/null || echo "30")
-    ENABLE_LOGGING=$(snapctl get enable-logging 2>/dev/null || echo "false")
-    LOG_LEVEL=$(snapctl get log-level 2>/dev/null || echo "INFO")
+    TRANSPORT=$(get_snapctl_value "transport" "streamable-http")
+    HOST=$(get_snapctl_value "host" "127.0.0.1")
+    PORT=$(get_snapctl_value "port" "8000")
+    SEARCH_TIMEOUT=$(get_snapctl_value "search-timeout" "10")
+    MAX_RESULTS=$(get_snapctl_value "max-results" "10")
+    ENABLE_SSL=$(get_snapctl_value "enable-ssl" "true")
+    USER_AGENT=$(get_snapctl_value "user-agent" "DuckDuckGo MCP Server/0.7.0")
+    PROXY=$(get_snapctl_value "proxy" "")
+    ENABLE_CACHE=$(get_snapctl_value "enable-cache" "true")
+    CACHE_TTL=$(get_snapctl_value "cache-ttl" "300")
+    CACHE_MAX_ENTRIES=$(get_snapctl_value "cache-max-entries" "64")
+    PARSE_MODE=$(get_snapctl_value "parse-mode" "text")
+    REF_URL_THRESHOLD=$(get_snapctl_value "ref-url-threshold" "120")
+    SAFE_SEARCH=$(get_snapctl_value "safe-search" "")
+    REGION=$(get_snapctl_value "region" "")
+    CA_CERTS=$(get_snapctl_value "ca-certs" "")
+    RATE_LIMIT_STRATEGY=$(get_snapctl_value "rate-limit-strategy" "sliding")
+    FETCH_RPM=$(get_snapctl_value "fetch-rpm" "20")
+    FETCH_HOST_RPM=$(get_snapctl_value "fetch-host-rpm" "0")
+    SEARCH_RPM=$(get_snapctl_value "search-rpm" "30")
+    ENABLE_LOGGING=$(get_snapctl_value "enable-logging" "false")
+    LOG_LEVEL=$(get_snapctl_value "log-level" "INFO")
 fi
 
 # Set environment variables for DDG_ options that don't have command-line switches
@@ -106,3 +122,4 @@ CMD_ARGS="$CMD_ARGS --user-agent \"$USER_AGENT\""
 
 # Execute the actual server with command line arguments
 exec "$SNAP/bin/duckduckgo-mcp-server" $CMD_ARGS
+
