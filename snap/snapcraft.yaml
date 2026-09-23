@@ -18,6 +18,9 @@ description: |
   - fetch-rpm: Fetch requests per minute [default: 20]
   - fetch-host-rpm: Per-host fetch cap [default: 0]
   - search-rpm: Search requests per minute [default: 30]
+  - allowed-hosts: Space saparated list of hosts to allow access [default: (empty)]
+  - allowed-origins: Space saparated list of origins to allow access [default: (empty)]
+  - no-ssl-verify: If set, drop ssl verification [default: (unset)]
 
   This snap simply packages the upstream tree from:
 
