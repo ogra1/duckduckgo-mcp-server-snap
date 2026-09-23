@@ -46,7 +46,7 @@ get_snapctl_value() {
 if command -v snapctl &> /dev/null; then
     # Get configuration values using snapctl
     TRANSPORT=$(get_snapctl_value "transport" "streamable-http")
-    HOST=$(get_snapctl_value "host" "127.0.0.1")
+    HOST=$(get_snapctl_value "host" "0.0.0.0")
     PORT=$(get_snapctl_value "port" "8000")
     CACHE_MAX_ENTRIES=$(get_snapctl_value "cache-max-entries" "64")
     REF_URL_THRESHOLD=$(get_snapctl_value "ref-url-threshold" "120")
