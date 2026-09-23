@@ -1,20 +1,12 @@
-#!/bin/bash
+#!/bin/sh
 # Wrapper script for duckduckgo-mcp-server
 # This script uses snapctl for configuration via snap hooks
 
 # Set default values (matching server defaults from README where possible)
 TRANSPORT="streamable-http"
-HOST="127.0.0.1"
+HOST="0.0.0.0"
 PORT="8000"
-SEARCH_TIMEOUT="10"
-MAX_RESULTS="10"
-ENABLE_SSL="true"
-USER_AGENT="DuckDuckGo MCP Server/0.7.0"
-PROXY=""
-ENABLE_CACHE="true"
-CACHE_TTL="300"
 CACHE_MAX_ENTRIES="64"
-PARSE_MODE="text"
 REF_URL_THRESHOLD="120"
 SAFE_SEARCH=""
 REGION=""
@@ -23,14 +15,11 @@ RATE_LIMIT_STRATEGY="sliding"
 FETCH_RPM="20"
 FETCH_HOST_RPM="0"
 SEARCH_RPM="30"
-ENABLE_LOGGING="false"
-LOG_LEVEL="INFO"
 
 # Helper function to get snapctl value or use default
 get_snapctl_value() {
-    local key="$1"
-    local default="$2"
-    local value
+    key="$1"
+    default="$2"
     
     value=$(snapctl get "$key" 2>/dev/null)
     
@@ -43,7 +32,7 @@ get_snapctl_value() {
 }
 
 # Check for configuration using snapctl
-if command -v snapctl &> /dev/null; then
+if command -v snapctl >/dev/null 2>&1; then
     # Get configuration values using snapctl
     TRANSPORT=$(get_snapctl_value "transport" "streamable-http")
     HOST=$(get_snapctl_value "host" "0.0.0.0")
@@ -57,6 +46,9 @@ if command -v snapctl &> /dev/null; then
     FETCH_RPM=$(get_snapctl_value "fetch-rpm" "20")
     FETCH_HOST_RPM=$(get_snapctl_value "fetch-host-rpm" "0")
     SEARCH_RPM=$(get_snapctl_value "search-rpm" "30")
+    ALLOWED_HOSTS=$(get_snapctl_value "allowed-hosts" "")
+    ALLOWED_ORIGINS=$(get_snapctl_value "allowed-origins" "")
+    NO_SSL_VERIFY=$(get_snapctl_value "no-ssl-verify" "")
 fi
 
 # Set environment variables for DDG_ options that don't have command-line switches
@@ -82,5 +74,10 @@ CMD_ARGS="$CMD_ARGS --host $HOST"
 # Add port (CLI option)
 CMD_ARGS="$CMD_ARGS --port $PORT"
 
+[ -z "$ALLOWED_HOSTS" ] || CMD_ARGS="$CMD_ARGS --allowed-hosts \"$ALLOWED_HOSTS\""
+
+[ -z "$ALLOWED_ORIGINS" ] || CMD_ARGS="$CMD_ARGS --allowed-origins \"$ALLOWED_ORIGINS\""
+
+[ -z "$NO_SSL_VERIFY" ] || CMD_ARGS="$CMD_ARGS --no-ssl-verify"
 # Execute the actual server with command line arguments
-exec "$SNAP/bin/duckduckgo-mcp-server" $CMD_ARGS
+exec "$SNAP/bin/duckduckgo-mcp-server" "$CMD_ARGS"
