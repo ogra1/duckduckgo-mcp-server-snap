@@ -62,22 +62,15 @@ export DDG_FETCH_HOST_RPM="$FETCH_HOST_RPM"
 export DDG_CACHE_MAX_ENTRIES="$CACHE_MAX_ENTRIES"
 export DDG_REF_URL_THRESHOLD="$REF_URL_THRESHOLD"
 
-# For the options that are actually command-line arguments, we'll build the command
-CMD_ARGS=""
+# Clear positional parameters to start fresh
+set --
 
-# Add transport (CLI option)
-CMD_ARGS="$CMD_ARGS --transport $TRANSPORT"
+set -- "$@" --transport "$TRANSPORT"
+set -- "$@" --host "$HOST"
+set -- "$@" --port "$PORT"
+[ -z "$ALLOWED_HOSTS" ]   || set -- "$@" --allowed-hosts "$ALLOWED_HOSTS"
+[ -z "$ALLOWED_ORIGINS" ] || set -- "$@" --allowed-origins "$ALLOWED_ORIGINS"
+[ -z "$NO_SSL_VERIFY" ]   || set -- "$@" --no-ssl-verify
 
-# Add host (CLI option)
-CMD_ARGS="$CMD_ARGS --host $HOST"
-
-# Add port (CLI option)
-CMD_ARGS="$CMD_ARGS --port $PORT"
-
-[ -z "$ALLOWED_HOSTS" ] || CMD_ARGS="$CMD_ARGS --allowed-hosts \"$ALLOWED_HOSTS\""
-
-[ -z "$ALLOWED_ORIGINS" ] || CMD_ARGS="$CMD_ARGS --allowed-origins \"$ALLOWED_ORIGINS\""
-
-[ -z "$NO_SSL_VERIFY" ] || CMD_ARGS="$CMD_ARGS --no-ssl-verify"
-# Execute the actual server with command line arguments
-exec "$SNAP/bin/duckduckgo-mcp-server" "$CMD_ARGS"
+# Execute the server safely with perfectly preserved arguments
+exec "$SNAP/bin/duckduckgo-mcp-server" "$@"
