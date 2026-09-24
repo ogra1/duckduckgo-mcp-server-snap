@@ -61,15 +61,17 @@ export DDG_FETCH_RPM="$FETCH_RPM"
 export DDG_FETCH_HOST_RPM="$FETCH_HOST_RPM"
 export DDG_CACHE_MAX_ENTRIES="$CACHE_MAX_ENTRIES"
 export DDG_REF_URL_THRESHOLD="$REF_URL_THRESHOLD"
+export DDG_ALLOWED_HOSTS="$(echo $ALLOWED_HOSTS|tr ' ' ',')"
+export DDG_ALLOWED_ORIGINS="$(echo $ALLOWED_ORIGINS|tr ' ' ',')"
 
+logger -t $SNAP_NAME "allowed hosts: $DDG_ALLOWED_HOSTS"
+logget -t $SNAP_NAME "allowed origins: $DDG_ALLOWED_ORIGINS"
 # Clear positional parameters to start fresh
 set --
 
 set -- "$@" --transport "$TRANSPORT"
 set -- "$@" --host "$HOST"
 set -- "$@" --port "$PORT"
-[ -z "$ALLOWED_HOSTS" ]   || set -- "$@" --allowed-hosts "$ALLOWED_HOSTS"
-[ -z "$ALLOWED_ORIGINS" ] || set -- "$@" --allowed-origins "$ALLOWED_ORIGINS"
 [ -z "$NO_SSL_VERIFY" ]   || set -- "$@" --no-ssl-verify
 
 # Execute the server safely with perfectly preserved arguments
